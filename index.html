@@ -1,0 +1,867 @@
+# Cash-profit
+Cashprofit mpesa payment website direct immidiate
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Profit Zone · Earn from tasks</title>
+  <!-- Font Awesome 6 (free icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      background: #0b0e14;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 12px;
+    }
+
+    /* main app container – mobile first, looks like a phone */
+    .app {
+      max-width: 420px;
+      width: 100%;
+      background: #11161f;
+      border-radius: 36px;
+      box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.8), 0 0 0 2px #2a3342 inset;
+      padding: 22px 18px 28px;
+      position: relative;
+      transition: all 0.2s;
+      border: 1px solid #2e3a4b;
+    }
+
+    /* status bar / top */
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #8b9bb5;
+      padding: 0 4px 10px 4px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+
+    /* ===== SCREEN MANAGEMENT ===== */
+    .screen {
+      display: none;
+      animation: fade 0.25s ease;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes fade {
+      0% { opacity: 0.5; transform: translateY(4px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== TYPOGRAPHY ===== */
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #f5c542, #e6a800);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: center;
+      margin: 8px 0 6px;
+    }
+
+    .subhead {
+      text-align: center;
+      color: #a0b3cc;
+      font-size: 14px;
+      margin-bottom: 24px;
+      font-weight: 400;
+    }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #f0f4fe;
+      margin-bottom: 6px;
+    }
+
+    .light-muted {
+      color: #8b9bb5;
+      font-size: 13px;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    /* ===== FORMS & INPUTS ===== */
+    .input-group {
+      margin-bottom: 14px;
+      position: relative;
+    }
+
+    .input-group i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #5f738c;
+      font-size: 16px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 16px 16px 16px 48px;
+      background: #1d2633;
+      border: 1.5px solid #2e3a4b;
+      border-radius: 20px;
+      font-size: 15px;
+      color: #eef3fc;
+      outline: none;
+      transition: 0.2s;
+      font-weight: 500;
+    }
+
+    .input-group input:focus {
+      border-color: #f5c542;
+      background: #1a212c;
+    }
+
+    .input-group input::placeholder {
+      color: #5b6c84;
+      font-weight: 400;
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 40px;
+      border: none;
+      font-weight: 700;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: #1d2633;
+      color: #d6e2f5;
+      border: 1px solid #2e3a4b;
+      margin-bottom: 12px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(145deg, #f5c542, #e6a800);
+      color: #0b0e14;
+      border: none;
+      font-weight: 800;
+      box-shadow: 0 8px 18px -6px #e6a80080;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+      box-shadow: 0 4px 10px -4px #e6a800cc;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid #3a465a;
+      color: #d0dded;
+    }
+
+    .btn-small {
+      padding: 12px 16px;
+      font-size: 14px;
+      border-radius: 30px;
+      width: auto;
+      margin-bottom: 0;
+    }
+
+    /* ===== CARDS & CONTAINERS ===== */
+    .card {
+      background: #171f2b;
+      border-radius: 26px;
+      padding: 18px;
+      border: 1px solid #2a3342;
+      margin-bottom: 16px;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+    }
+
+    .balance-grid {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .balance-box {
+      background: #1b2432;
+      border-radius: 22px;
+      padding: 16px 10px;
+      flex: 1;
+      text-align: center;
+      border: 1px solid #2b3648;
+    }
+
+    .balance-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #889bb8;
+      font-weight: 600;
+    }
+
+    .balance-amount {
+      font-size: 22px;
+      font-weight: 800;
+      color: #f5c542;
+      margin-top: 5px;
+      line-height: 1.2;
+    }
+
+    .balance-amount span {
+      font-size: 13px;
+      font-weight: 500;
+      color: #aab9ce;
+    }
+
+    /* ===== DASHBOARD ACTIONS ===== */
+    .action-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .action-btn {
+      flex: 1;
+      background: #1e2837;
+      border: 1px solid #313e52;
+      border-radius: 18px;
+      padding: 14px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: #cfddf0;
+      font-weight: 600;
+      font-size: 12px;
+      transition: 0.15s;
+      cursor: pointer;
+    }
+
+    .action-btn i {
+      font-size: 22px;
+      color: #f5c542;
+    }
+
+    .action-btn:active {
+      background: #263141;
+    }
+
+    /* ===== TASK LIST ===== */
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0 12px;
+    }
+
+    .section-title h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #e8f0fe;
+    }
+
+    .section-title a {
+      color: #f5c542;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .task-item {
+      background: #171f2b;
+      border-radius: 18px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      border: 1px solid #263040;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: 0.1s;
+    }
+
+    .task-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .task-name {
+      font-weight: 700;
+      color: #eef3fc;
+      font-size: 15px;
+    }
+
+    .task-desc {
+      font-size: 11px;
+      color: #8399b8;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .task-earn {
+      background: #1f2b1f;
+      padding: 8px 14px;
+      border-radius: 30px;
+      font-weight: 800;
+      color: #9fe870;
+      font-size: 15px;
+      border: 1px solid #3b6b3b;
+      white-space: nowrap;
+      margin-left: 6px;
+    }
+
+    .task-earn small {
+      font-weight: 400;
+      font-size: 10px;
+      color: #a1c78f;
+      margin-left: 2px;
+    }
+
+    /* ===== REFER & EARN ===== */
+    .refer-card {
+      background: linear-gradient(135deg, #1a2330, #131b26);
+      border-radius: 24px;
+      padding: 18px;
+      margin: 10px 0;
+      border: 1px solid #3a4c63;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .refer-card .left h4 {
+      color: #f0f5ff;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .refer-card .left p {
+      color: #8fa2c0;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .refer-amount {
+      background: #2d3e2d;
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-weight: 800;
+      color: #b5ff8a;
+      font-size: 18px;
+      border: 1px solid #538f53;
+    }
+
+    /* ===== ACTIVATION FEE NOTICE ===== */
+    .fee-notice {
+      background: #2a1f1a;
+      border-radius: 16px;
+      padding: 14px 16px;
+      border-left: 6px solid #f5c542;
+      margin: 16px 0 8px;
+      color: #f0dbb0;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .fee-notice i {
+      color: #f5c542;
+      font-size: 20px;
+    }
+
+    .fee-notice strong {
+      color: #ffffff;
+      font-weight: 800;
+    }
+
+    /* ===== SIGN IN / UP LINKS ===== */
+    .bottom-link {
+      text-align: center;
+      margin: 18px 0 6px;
+      color: #a0b3cc;
+      font-size: 14px;
+    }
+
+    .bottom-link a {
+      color: #f5c542;
+      font-weight: 700;
+      text-decoration: none;
+      margin-left: 4px;
+    }
+
+    /* ===== ACCOUNT NUMBERS (activation) ===== */
+    .payment-details {
+      background: #1a212c;
+      border-radius: 16px;
+      padding: 14px;
+      font-size: 13px;
+      border: 1px dashed #4d5f78;
+      margin: 12px 0;
+    }
+
+    .payment-details p {
+      color: #bccce3;
+      margin-bottom: 6px;
+    }
+
+    .payment-details span {
+      color: #f5c542;
+      font-weight: 700;
+      font-family: monospace;
+      font-size: 14px;
+      background: #0b0e14;
+      padding: 4px 8px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+
+    /* ===== MISC ===== */
+    .divider {
+      height: 1px;
+      background: #263040;
+      margin: 16px 0;
+    }
+
+    .flex-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge {
+      background: #1e2837;
+      padding: 4px 10px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #b9cbe6;
+    }
+
+    i.fa-chevron-right {
+      color: #5f738c;
+      font-size: 14px;
+    }
+
+    /* hide scroll */
+    ::-webkit-scrollbar {
+      width: 0;
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+<div class="app" id="app">
+  <!-- top bar -->
+  <div class="status-bar">
+    <span><i class="fas fa-signal"></i> 5G</span>
+    <span>Profit Zone</span>
+    <span><i class="fas fa-battery-full"></i> 100%</span>
+  </div>
+
+  <!-- ================= SCREEN: SIGN IN ================= -->
+  <div id="signinScreen" class="screen active">
+    <div class="logo">Profit Zone</div>
+    <div class="subhead">sign in to your account</div>
+
+    <div class="input-group">
+      <i class="fas fa-user"></i>
+      <input type="text" placeholder="Username or email" id="loginUsername" value="demo_user">
+    </div>
+    <div class="input-group">
+      <i class="fas fa-lock"></i>
+      <input type="password" placeholder="Password" id="loginPassword" value="password123">
+    </div>
+
+    <button class="btn btn-primary" id="signInBtn"><i class="fas fa-arrow-right-to-bracket"></i> Sign In</button>
+
+    <div class="bottom-link">
+      Don't have an account? <a href="#" id="goToSignup">Create account</a>
+    </div>
+
+    <!-- subtle demo hint -->
+    <div style="text-align: center; margin-top: 18px; color: #3e4c61; font-size: 11px;">
+      <i class="fas fa-shield-alt"></i> demo login: demo_user / password123
+    </div>
+  </div>
+
+  <!-- ================= SCREEN: SIGN UP ================= -->
+  <div id="signupScreen" class="screen">
+    <div class="logo">Profit Zone</div>
+    <div class="subhead">create your account</div>
+
+    <div class="input-group">
+      <i class="fas fa-user-circle"></i>
+      <input type="text" placeholder="Full name" id="fullName" value="John Mwangi">
+    </div>
+    <div class="input-group">
+      <i class="fas fa-at"></i>
+      <input type="text" placeholder="Username" id="username" value="john_m">
+    </div>
+    <div class="input-group">
+      <i class="fas fa-envelope"></i>
+      <input type="email" placeholder="Email address" id="email" value="john@example.com">
+    </div>
+    <div class="input-group">
+      <i class="fas fa-phone"></i>
+      <input type="tel" placeholder="Phone number" id="phone" value="0712345678">
+    </div>
+    <div class="input-group">
+      <i class="fas fa-lock"></i>
+      <input type="password" placeholder="Password" id="password" value="pass1234">
+    </div>
+
+    <!-- ACTIVATION FEE BLOCK -->
+    <div class="fee-notice">
+      <i class="fas fa-circle-exclamation"></i>
+      <div>Activation fee <strong>Sh. 65</strong> is required to activate your account.</div>
+    </div>
+
+    <div class="payment-details">
+      <p><i class="fas fa-mobile-alt"></i> Pay to:</p>
+      <p>Phone: <span>0712 345 678</span> (M-Pesa)</p>
+      <p>Bank: <span>ProfitZone Ltd · 1234567890</span></p>
+      <p style="font-size: 11px; color: #7c8ca3; margin-top: 8px;"><i class="fas fa-info-circle"></i> Use your username as reference</p>
+    </div>
+
+    <button class="btn btn-primary" id="signUpBtn"><i class="fas fa-user-plus"></i> Create account & pay Sh.65</button>
+
+    <div class="bottom-link">
+      Already registered? <a href="#" id="goToSignin">Sign in</a>
+    </div>
+  </div>
+
+  <!-- ================= SCREEN: DASHBOARD ================= -->
+  <div id="dashboardScreen" class="screen">
+    <!-- header -->
+    <div class="flex-between" style="margin-bottom: 12px;">
+      <div>
+        <h2 style="font-size: 20px; margin-bottom: 2px;">Hello, <span id="displayUsername">John</span></h2>
+        <div class="light-muted" style="margin-bottom: 0; font-size: 12px;"><i class="fas fa-circle-check" style="color: #6fcf6f;"></i> Account activated</div>
+      </div>
+      <div class="badge"><i class="fas fa-star"></i> Level 1</div>
+    </div>
+
+    <!-- balance -->
+    <div class="balance-grid">
+      <div class="balance-box">
+        <div class="balance-label">Main balance</div>
+        <div class="balance-amount">Sh. <span id="mainBalance">350</span></div>
+      </div>
+      <div class="balance-box">
+        <div class="balance-label">Savings</div>
+        <div class="balance-amount">Sh. <span id="savingsBalance">120</span></div>
+      </div>
+    </div>
+
+    <!-- deposit / withdraw / savings / tasks / refer -->
+    <div class="action-row">
+      <div class="action-btn" id="depositBtn"><i class="fas fa-circle-plus"></i> Deposit</div>
+      <div class="action-btn" id="withdrawBtn"><i class="fas fa-circle-minus"></i> Withdraw</div>
+      <div class="action-btn" id="savingsBtn"><i class="fas fa-piggy-bank"></i> Savings</div>
+    </div>
+    <div class="action-row">
+      <div class="action-btn" id="tasksBtn"><i class="fas fa-list-check"></i> Tasks</div>
+      <div class="action-btn" id="referBtn"><i class="fas fa-users"></i> Refer & earn</div>
+    </div>
+
+    <!-- refer & earn highlight -->
+    <div class="refer-card" id="referCardBtn">
+      <div class="left">
+        <h4>Refer & earn <i class="fas fa-arrow-right" style="font-size: 12px; color: #f5c542;"></i></h4>
+        <p>Invite friends, get Sh.100 per person</p>
+      </div>
+      <div class="refer-amount">+100</div>
+    </div>
+
+    <!-- task preview -->
+    <div class="section-title">
+      <h3>Available tasks</h3>
+      <a href="#" id="seeAllTasks">See all <i class="fas fa-chevron-right"></i></a>
+    </div>
+
+    <div class="task-item">
+      <div class="task-info">
+        <div class="task-name">UI/UX survey</div>
+        <div class="task-desc"><i class="fas fa-clock"></i> 5 min · app rating</div>
+      </div>
+      <div class="task-earn">Sh. 150</div>
+    </div>
+    <div class="task-item">
+      <div class="task-info">
+        <div class="task-name">Watch ad (30s)</div>
+        <div class="task-desc"><i class="fas fa-play-circle"></i> video · 1 per day</div>
+      </div>
+      <div class="task-earn">Sh. 50</div>
+    </div>
+    <div class="task-item">
+      <div class="task-info">
+        <div class="task-name">Hotel review</div>
+        <div class="task-desc"><i class="fas fa-hotel"></i> write review</div>
+      </div>
+      <div class="task-earn">Sh. 800</div>
+    </div>
+    <div class="task-item">
+      <div class="task-info">
+        <div class="task-name">Chat with wazungu</div>
+        <div class="task-desc"><i class="fas fa-comment"></i> 10 min conversation</div>
+      </div>
+      <div class="task-earn">Sh. 400</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- quick stats -->
+    <div class="flex-between" style="color: #8b9bb5; font-size: 13px;">
+      <span><i class="fas fa-circle-check" style="color: #6fcf6f;"></i> 8 tasks completed</span>
+      <span><i class="fas fa-arrow-up"></i> Sh.2,450 earned</span>
+    </div>
+
+    <button class="btn btn-outline" style="margin-top: 18px;" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Log out</button>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ---------- DOM elements ----------
+    const signinScreen = document.getElementById('signinScreen');
+    const signupScreen = document.getElementById('signupScreen');
+    const dashboardScreen = document.getElementById('dashboardScreen');
+
+    // nav links
+    const goToSignup = document.getElementById('goToSignup');
+    const goToSignin = document.getElementById('goToSignin');
+
+    // sign in / up buttons
+    const signInBtn = document.getElementById('signInBtn');
+    const signUpBtn = document.getElementById('signUpBtn');
+
+    // dashboard elements
+    const displayUsername = document.getElementById('displayUsername');
+    const mainBalance = document.getElementById('mainBalance');
+    const savingsBalance = document.getElementById('savingsBalance');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    // action buttons (deposit/withdraw etc.)
+    const depositBtn = document.getElementById('depositBtn');
+    const withdrawBtn = document.getElementById('withdrawBtn');
+    const savingsBtn = document.getElementById('savingsBtn');
+    const tasksBtn = document.getElementById('tasksBtn');
+    const referBtn = document.getElementById('referBtn');
+    const referCardBtn = document.getElementById('referCardBtn');
+    const seeAllTasks = document.getElementById('seeAllTasks');
+
+    // state (simple simulation)
+    let currentUser = {
+      username: 'demo_user',
+      fullName: 'Demo User',
+      mainBalance: 350,
+      savings: 120,
+      activated: true
+    };
+
+    // ---------- helper: show screen ----------
+    function showScreen(screen) {
+      signinScreen.classList.remove('active');
+      signupScreen.classList.remove('active');
+      dashboardScreen.classList.remove('active');
+      screen.classList.add('active');
+    }
+
+    // ---------- sign IN logic ----------
+    signInBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const usernameInput = document.getElementById('loginUsername').value.trim();
+      const passwordInput = document.getElementById('loginPassword').value.trim();
+
+      if (!usernameInput || !passwordInput) {
+        alert('Please enter username and password');
+        return;
+      }
+
+      // demo: accept demo_user / password123 or any non-empty (since it's a demo)
+      // For realism: we simulate user. But we'll keep consistent with demo.
+      if (usernameInput === 'demo_user' && passwordInput === 'password123') {
+        currentUser.username = 'demo_user';
+        currentUser.fullName = 'Demo User';
+      } else {
+        // allow any new "sign in" if not empty (just to keep flow)
+        currentUser.username = usernameInput;
+        currentUser.fullName = usernameInput;
+      }
+
+      // update dashboard with username
+      displayUsername.textContent = currentUser.fullName.split(' ')[0] || currentUser.username;
+      mainBalance.textContent = currentUser.mainBalance;
+      savingsBalance.textContent = currentUser.savings;
+
+      showScreen(dashboardScreen);
+    });
+
+    // ---------- sign UP logic (activation fee notice) ----------
+    signUpBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      const fullName = document.getElementById('fullName').value.trim();
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (!fullName || !username || !email || !phone || !password) {
+        alert('Please fill in all fields.');
+        return;
+      }
+
+      // Activation fee simulation: we inform the user that Sh.65 is required.
+      // Since we cannot actually process, we show a confirmation.
+      const confirmMsg = `Activation fee of Sh.65 is required.\n\nPay to:\nPhone: 0712 345 678 (M-Pesa)\nBank: ProfitZone Ltd · 1234567890\n\nReference: ${username}\n\nClick OK to simulate payment and activate account.`;
+      
+      if (confirm(confirmMsg)) {
+        // simulate successful activation
+        currentUser = {
+          username: username,
+          fullName: fullName,
+          mainBalance: 0,     // new user starting balance
+          savings: 0,
+          activated: true
+        };
+
+        // update dashboard display
+        displayUsername.textContent = fullName.split(' ')[0] || username;
+        mainBalance.textContent = currentUser.mainBalance;
+        savingsBalance.textContent = currentUser.savings;
+
+        // show dashboard
+        showScreen(dashboardScreen);
+        alert('Account activated! Welcome to Profit Zone.');
+      } else {
+        alert('Activation cancelled. You can try again.');
+      }
+    });
+
+    // ---------- switch screens ----------
+    goToSignup.addEventListener('click', (e) => {
+      e.preventDefault();
+      showScreen(signupScreen);
+    });
+
+    goToSignin.addEventListener('click', (e) => {
+      e.preventDefault();
+      showScreen(signinScreen);
+    });
+
+    // ---------- dashboard actions (simulated) ----------
+    depositBtn.addEventListener('click', () => {
+      const amount = prompt('Enter amount to deposit (Sh.):', '100');
+      if (amount && !isNaN(amount) && Number(amount) > 0) {
+        currentUser.mainBalance = Number(currentUser.mainBalance) + Number(amount);
+        mainBalance.textContent = currentUser.mainBalance;
+        alert(`Deposited Sh. ${amount}. New balance: Sh. ${currentUser.mainBalance}`);
+      }
+    });
+
+    withdrawBtn.addEventListener('click', () => {
+      const amount = prompt('Enter amount to withdraw (Sh.):', '50');
+      if (amount && !isNaN(amount) && Number(amount) > 0) {
+        const amt = Number(amount);
+        if (amt > currentUser.mainBalance) {
+          alert('Insufficient balance.');
+          return;
+        }
+        currentUser.mainBalance -= amt;
+        mainBalance.textContent = currentUser.mainBalance;
+        alert(`Withdrawn Sh. ${amt}. New balance: Sh. ${currentUser.mainBalance}`);
+      }
+    });
+
+    savingsBtn.addEventListener('click', () => {
+      const action = prompt('Savings: Type "deposit" to move from main to savings, or "withdraw" to move from savings to main.', 'deposit');
+      if (!action) return;
+      if (action.toLowerCase() === 'deposit') {
+        const amount = prompt('Amount to move to savings:');
+        if (amount && !isNaN(amount) && Number(amount) > 0) {
+          const amt = Number(amount);
+          if (amt > currentUser.mainBalance) {
+            alert('Insufficient main balance.');
+            return;
+          }
+          currentUser.mainBalance -= amt;
+          currentUser.savings += amt;
+          mainBalance.textContent = currentUser.mainBalance;
+          savingsBalance.textContent = currentUser.savings;
+          alert(`Moved Sh. ${amt} to savings.`);
+        }
+      } else if (action.toLowerCase() === 'withdraw') {
+        const amount = prompt('Amount to move from savings to main:');
+        if (amount && !isNaN(amount) && Number(amount) > 0) {
+          const amt = Number(amount);
+          if (amt > currentUser.savings) {
+            alert('Insufficient savings balance.');
+            return;
+          }
+          currentUser.savings -= amt;
+          currentUser.mainBalance += amt;
+          mainBalance.textContent = currentUser.mainBalance;
+          savingsBalance.textContent = currentUser.savings;
+          alert(`Moved Sh. ${amt} to main balance.`);
+        }
+      } else {
+        alert('Invalid action. Use "deposit" or "withdraw".');
+      }
+    });
+
+    // tasks button: show list of tasks with specific earnings
+    tasksBtn.addEventListener('click', () => {
+      alert('📋 TASK LIST:\n\n1. UI/UX survey – Sh.150\n2. App rating – Sh.200\n3. Watch ad (30s) – Sh.50\n4. Hotel review – Sh.800\n5. Chat with wazungu – Sh.400\n6. Product feedback – Sh.300\n7. Quick poll – Sh.80\n\nGo to "See all tasks" to start earning.');
+    });
+
+    // refer & earn (both button and card)
+    const showReferInfo = () => {
+      alert('👥 REFER & EARN\n\nInvite a friend and get Sh.100 for each person who joins and activates.\n\nYour referral link: profit.zone/ref/' + (currentUser.username || 'user'));
+    };
+    referBtn.addEventListener('click', showReferInfo);
+    referCardBtn.addEventListener('click', showReferInfo);
+
+    // see all tasks
+    seeAllTasks.addEventListener('click', (e) => {
+      e.preventDefault();
+      alert('📋 ALL TASKS (earning range Sh.50–800)\n\n• Survey: Sh.150\n• App rating: Sh.200\n• Watch ad: Sh.50\n• Hotel review: Sh.800\n• Chat with wazungu: Sh.400\n• Product feedback: Sh.300\n• Quick poll: Sh.80\n• UI/UX test: Sh.250\n• Refer & earn: Sh.100/person\n\nEach task shows exact payout.');
+    });
+
+    // logout → back to sign in
+    logoutBtn.addEventListener('click', () => {
+      showScreen(signinScreen);
+      // reset login fields to demo
+      document.getElementById('loginUsername').value = 'demo_user';
+      document.getElementById('loginPassword').value = 'password123';
+    });
+
+    // initial: ensure sign-in screen is visible
+    showScreen(signinScreen);
+
+    // small touch: show username in dashboard if user signs in
+    // (already handled)
+  })();
+</script>
+</body>
+</html>
